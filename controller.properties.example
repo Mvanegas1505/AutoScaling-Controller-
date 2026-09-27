@@ -6,8 +6,8 @@
 
 # --- AWS: reemplazar con los valores reales de tu infraestructura ---
 aws.region=us-east-1
-aws.launchTemplateId=lt-0b70f09548a8ab103
-aws.targetGroupArn=arn:aws:elasticloadbalancing:us-east-1:491579268637:targetgroup/tg/ec3a224ac3dc6c06
+aws.launchTemplateId=lt-... (ID del launch template)
+aws.targetGroupArn=arn:aws:elasticloadbalancing... (ARN del target group)
 
 # --- Controller ---
 log.archivo=ciclos.csv
