@@ -34,7 +34,7 @@ public class Main {
         // --- Controller ---
         String rutaLog = config.getProperty("log.archivo", "ciclos.csv");
         int intervaloSegundos = entero(config, "controller.intervaloSegundos", 60);
-        int cooldownCiclos = entero(config, "controller.cooldownCiclos", 5);
+        int cooldownCiclos = entero(config, "controller.cooldownCiclos", 3);
         int tamanoVentana = entero(config, "controller.tamanoVentana", 11);
 
         // --- Política: se parte de los valores por defecto y se sobreescriben los que haya
@@ -42,7 +42,10 @@ public class Main {
         ParametrosControl d = ParametrosControl.porDefecto();
         ParametrosControl parametros = new ParametrosControl(
                 d.k(), d.horizonteMinutos(), d.confirmacionesIncrease(), d.confirmacionesReduce(),
-                d.healthyHostCountMinimo(), d.margenMinimoCpu(), d.margenMinimoRequest(), d.lecturasMinimas(),
+                d.healthyHostCountMinimo(),
+                decimal(config, "politica.margenMinimoCpu", d.margenMinimoCpu()),
+                decimal(config, "politica.margenMinimoRequest", d.margenMinimoRequest()),
+                entero(config, "politica.lecturasMinimas", d.lecturasMinimas()),
                 decimal(config, "politica.techoCpu", d.techoCpu()),
                 decimal(config, "politica.pisoCpu", d.pisoCpu()),
                 decimal(config, "politica.techoRequest", d.techoRequest()),

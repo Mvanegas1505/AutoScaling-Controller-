@@ -41,7 +41,7 @@ public record ParametrosControl(
                 4,      // confirmacionesReduce
                 1,      // healthyHostCountMinimo
                 5.0,    // margenMinimoCpu
-                10.0,   // margenMinimoRequest
+                45.0,   // margenMinimoRequest (V2: 10 -> 45 ≈ 2·√450, ruido Poisson del conteo por minuto)
                 5,      // lecturasMinimas
                 75.0,   // techoCpu
                 30.0,   // pisoCpu

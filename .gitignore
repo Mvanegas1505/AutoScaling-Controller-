@@ -16,3 +16,8 @@ keys/
 ~$*
 
 controller.properties
+
+# Carpeta con los resultados descargados de los experimentos
+resultados/
+
+entrega/

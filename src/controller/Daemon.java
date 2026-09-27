@@ -122,6 +122,10 @@ public class Daemon {
         ultimasInstanciasConocidas = instanciasAntes;
 
         // ---------- 2. VALIDAR ----------
+        // V2: durante el cooldown las lecturas NO entran a la ventana. CloudWatch va ~3 min
+        // atrasado, así que esos datos todavía son de antes de la acción (o de la transición)
+        // y ensuciarían la banda y la regresión. Sí se marca su timestamp como visto.
+        boolean enCooldown = estado.enCooldown();
         List<String> descartes = new ArrayList<>();
         for (Metrica m : lecturas) {
             if (!esValida(m)) {
@@ -129,9 +133,19 @@ public class Daemon {
             } else if (!esNueva(m)) {
                 descartes.add(m.getNombre() + " repetida");
             } else {
-                estado.agregarLectura(m);
+                if (!enCooldown) {
+                    estado.agregarLectura(m);
+                }
                 ultimoTimestamp.put(m.getNombre(), m.getTimestamp());
             }
+        }
+
+        if (enCooldown) {
+            registrarSinDecision(inicioCiclo, lecturas, instanciasAntes,
+                    "En cooldown (quedan " + estado.getCooldownRestante() + " ciclos): las métricas aún no "
+                            + "reflejan la última acción. Las lecturas no entran a la ventana. Se mantiene la capacidad.");
+            estado.avanzarCiclo();
+            return;
         }
 
         // Las 3 métricas que usa la decisión deben tener un dato NUEVO en este ciclo.
@@ -175,6 +189,9 @@ public class Daemon {
             // Este ciclo NO descuenta cooldown, así dura 'cooldownCiclos' ciclos completos.
             estado.resetearConfirmaciones();
             estado.activarCooldown(cooldownCiclos);
+            // V2: las métricas son POR INSTANCIA y cambian de nivel con la acción aunque la
+            // demanda no cambie: la ventana vuelve a empezar con la nueva capacidad
+            estado.limpiarVentanas();
         } else {
             // Si la acción falló, no se toca nada: la racha sigue y se reintenta el próximo ciclo (6.3)
             estado.avanzarCiclo();

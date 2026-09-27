@@ -34,12 +34,26 @@ public class State {
         ventanas.put(nombre, lista);
     }
 
+    /**
+     * V2: vacía las ventanas de todas las métricas. Se llama después de cada acción de escalado,
+     * porque las métricas son POR INSTANCIA: al agregar o quitar una instancia cambian de nivel
+     * aunque la demanda no cambie, y mezclar lecturas de antes y después de la acción hace que
+     * la regresión vea una "tendencia" que causó el propio controller (experimento 1, 07:40).
+     */
+    public void limpiarVentanas() {
+        ventanas.clear();
+    }
+
     public List<Metrica> getVentana(String nombreMetrica) {
         return ventanas.getOrDefault(nombreMetrica, new LinkedList<>());
     }
 
     public boolean enCooldown() {
         return cooldownLeft > 0;
+    }
+
+    public int getCooldownRestante() {
+        return cooldownLeft;
     }
 
     public void activarCooldown(int ciclos) {
