@@ -1,0 +1,16 @@
+# Lo que genera Maven al compilar (se regenera con mvn package)
+target/
+
+# Configuración personal del editor
+.vscode/
+
+# Claves: NUNCA al repo
+*.pem
+keys/
+
+# Resultados de experimentos y logs
+*.csv
+*.log
+
+# Archivos temporales de Word cuando el documento está abierto
+~$*
