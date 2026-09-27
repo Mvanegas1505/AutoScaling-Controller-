@@ -14,3 +14,5 @@ keys/
 
 # Archivos temporales de Word cuando el documento está abierto
 ~$*
+
+controller.properties
